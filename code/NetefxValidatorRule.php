@@ -5,7 +5,7 @@
  * @author lx-berlin
  * @author zauberfisch
  */
-abstract class NetefxValidatorRule extends Object {
+abstract class NetefxValidatorRule extends SS_Object {
 		protected $field;
 		protected $args;		
 		protected $errorMsg;
