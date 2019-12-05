@@ -1,16 +1,27 @@
-<?php 
+<?php
+
+namespace LxBerlin;
+
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Config\Configurable;
 
 /**
  * @package NetefxValidator
  * @author lx-berlin
  * @author zauberfisch
  */
-abstract class NetefxValidatorRule extends SS_Object {
+abstract class NetefxValidatorRule {
+
+		use Extensible;
+		use Injectable;
+		use Configurable;
+
 		protected $field;
-		protected $args;		
+		protected $args;
 		protected $errorMsg;
 		protected $errorMsgType;
-		
+
 		/**
 		 * @return string
 		 */
@@ -62,23 +73,23 @@ abstract class NetefxValidatorRule extends SS_Object {
 		public function setErrorMessageType($type) {
 			$this->errorMsgType = $type;
 		}
-		
+
 		/**
 		 * @param string $field name of the field
 		 * @param string $errorMsg the message to be displayed
 		 * @param string $errorMsgType the css class added to the field on validation error
 		 * @param mixed $args additional arguments needed in speical rules like FUNCTION
 		 */
-		public function __construct($field, $errorMsg = null, $errorMsgType = 'error', $args = null) {	
+		public function __construct($field, $errorMsg = null, $errorMsgType = 'error', $args = null) {
 			parent::__construct();
 			$this->setField($field);
 			$this->setErrorMessage($errorMsg);
 			$this->setArgs($args);
 			$this->setErrorMessageType($errorMsgType);
 		}
-		
+
 		/**
-		 * evaluates the given expression, having names of other fields included in the characters @ and ~ resp. 
+		 * evaluates the given expression, having names of other fields included in the characters @ and ~ resp.
 		 * Since you need numeric expressions to do arithmetic operations and for security reasons you have to call checkNumeric() before.
 		 * @param array $data
 		 * @param string $expr
@@ -90,13 +101,13 @@ abstract class NetefxValidatorRule extends SS_Object {
 			$expr = "return ".$expr.";";
 			return eval($expr);
 		}
-		
+
 		/**
 		 * @param array $data
 		 * @param string $expr
 		 * @return boolean
 		 */
-		protected function checkNumeric($data,$expr) {			
+		protected function checkNumeric($data,$expr) {
 			$pos = -1;
 			$pos2 = -1;
 			do {
@@ -104,7 +115,7 @@ abstract class NetefxValidatorRule extends SS_Object {
 				$pos2 = strpos ($expr,'~', $pos2+1);
 				if ($pos !== false) {
 					$fieldname = substr ($expr,$pos+1,$pos2-$pos-1);
-					if (!is_numeric($data[$fieldname]))		
+					if (!is_numeric($data[$fieldname]))
 						return false;
 				} else {
 					return true;
@@ -112,7 +123,7 @@ abstract class NetefxValidatorRule extends SS_Object {
 			}
 			while (true);
 		}
-		
+
         /**
         * converts custom number format to english number format (eg: german uses , instead of . for the decimal seperator)
         * @param string $number
@@ -120,18 +131,21 @@ abstract class NetefxValidatorRule extends SS_Object {
         */
 		protected function numberFormatConversion($number, $separator) {
 			if (preg_match("/^[0-9".$separator."]{1,}$/", $number)>0) {
-				$number = str_replace($separator,".",$number);           
+				$number = str_replace($separator,".",$number);
 	            return $number;
-			} 
-			return false;			
+			}
+			return false;
         }
-        
+
 		/**
          * This function needs to be overwritten
          * @param array $data
          * @return boolean
          */
         abstract public function validate($data);
-		
+
 		public function jsValidation() {}
 }
+
+
+

@@ -1,4 +1,9 @@
 <?php 
+use LxBerlin\NetefxValidatorRule;
+use SilverStripe\Core\Convert;
+use SilverStripe\ORM\DataObject;
+
+
 
 /**
  * @package NetefxValidator

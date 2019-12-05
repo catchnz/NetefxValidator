@@ -1,16 +1,25 @@
 <?php
 
+namespace LxBerlin;
+
+
+
+use SilverStripe\Control\Session;
+use SilverStripe\Forms\Validator;
+
+
+
 /**
 * NetefxValidator
-* 
+*
 * @version 0.7 (because Zauberfisch made a lot of changes. And its no more compatible to version 0.45)
-* @package NetefxValidator 
+* @package NetefxValidator
 * @author lx-berlin
 * @author zauberfisch
 */
 
 class NetefxValidator extends Validator {
-	
+
 	protected $rules;
 	protected $javascriptValidationHandler = 'none';
 
@@ -20,7 +29,7 @@ class NetefxValidator extends Validator {
 	public function getRules() {
 		return $this->rules;
 	}
-	
+
 	/**
 	 * if the first parameter is not an array, or we have more than one parameter, collate all parameters to an array, otherwise use the passed array
 	 * @param array|mixed $items
@@ -28,7 +37,7 @@ class NetefxValidator extends Validator {
 	public function setRules($items = null) {
 		$this->rules = (!is_array($items) || count(func_get_args()) > 1) ? func_get_args() : $items;
 	}
-	
+
 	/**
 	 * if the first parameter is not an array, or we have more than one parameter, collate all parameters to an array, otherwise use the passed array
 	 * @param array|mixed $items
@@ -36,10 +45,10 @@ class NetefxValidator extends Validator {
 	public function __construct() {
 		$this->setRules(func_get_args());
 		parent::__construct();
-		
+
 	}
 
-	
+
 	/**
 	 * javascript not implemented yet
 	 * @return string
@@ -61,26 +70,26 @@ class NetefxValidator extends Validator {
 			$valid = ($field->validate($this) && $valid);
 		}
 		if($this->rules) {
-			foreach($this->rules as $rule) { 
-				
+			foreach($this->rules as $rule) {
+
 				if (!$rule->validate($data)) {
 					$errorMessage = $rule->getErrorMessage();
 					$errorMessageType = $rule->getErrorMessageType();
 					$fieldName = $rule->getField();
-	 
+
 					$this->validationError(
 							$fieldName,
 							$errorMessage,
 							$errorMessageType
-					); 
+					);
 					$valid = false;
 				}
 			}
 		}
-        
+
         if (!$valid) Session::set("NetefxValidatorError",true);
-        
+
 		return $valid;
 	}
-		
+
 }

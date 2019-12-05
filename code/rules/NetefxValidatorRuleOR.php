@@ -1,4 +1,6 @@
 <?php 
+use LxBerlin\NetefxValidatorRule;
+
 
 /**
  * @package NetefxValidator
