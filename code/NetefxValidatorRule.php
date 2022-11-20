@@ -81,7 +81,6 @@ abstract class NetefxValidatorRule {
 		 * @param mixed $args additional arguments needed in speical rules like FUNCTION
 		 */
 		public function __construct($field, $errorMsg = null, $errorMsgType = 'error', $args = null) {
-			parent::__construct();
 			$this->setField($field);
 			$this->setErrorMessage($errorMsg);
 			$this->setArgs($args);
